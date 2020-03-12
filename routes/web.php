@@ -29,3 +29,7 @@ Route::get('hello/{name}', function ($name){
 Route::get('hello/{name}/city/{city?}', function($name, $city = 'Kiev') {
     return "hello, {$name} from {$city}. OMG, it works ¯\_(ツ)_/¯";
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
