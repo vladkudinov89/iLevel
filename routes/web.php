@@ -13,23 +13,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::get('hello', function (){
-    return "hello, world. OMG, it works ¯\_(ツ)_/¯";
-});
-
-Route::get('hello/{name}', function ($name){
-    return "hello, {$name}. OMG, it works ¯\_(ツ)_/¯";
-})->where(['name' => '[A-z]+'])->name('profile');
-
-
-Route::get('hello/{name}/city/{city?}', function($name, $city = 'Kiev') {
-    return "hello, {$name} from {$city}. OMG, it works ¯\_(ツ)_/¯";
-});
+Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::group(['middleware' => 'auth'], function () {
+
+    Route::get('/', function () {
+        return redirect()->route('shop.index');
+    });
+
+    Route::get( '/' ,'ShopController@index')->name('shop.index');
+});
