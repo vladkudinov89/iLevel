@@ -3,14 +3,14 @@
 
 namespace App\Repositories\Shop\Category;
 
-
+use Illuminate\Database\Eloquent\Collection;
 use App\Entities\Category;
 
 class CategoryRepository implements CategoryRepositoryInterface
 {
-    public function findAll()
+    public function findAll(): Collection
     {
-        // TODO: Implement findAll() method.
+        return Category::all();
     }
 
     public function getById(int $id): ?Category
