@@ -34,8 +34,8 @@ class ShopControllerTest extends TestCase
             ->assertStatus(200)
             ->getOriginalContent();
 
-        $this->assertEquals($categories[0]->name , $response['categories'][0]['category_name']);
-        $this->assertEquals($categories[0]->id , $response['products'][0]['product_category'][0]['id']);
+        $this->assertEquals($categories[0]->name, $response['categories'][0]['category_name']);
+        $this->assertEquals($categories[0]->id, $response['products'][0]['product_category'][0]['id']);
     }
 
     /** @test */
@@ -60,7 +60,27 @@ class ShopControllerTest extends TestCase
             ->assertStatus(200)
             ->getOriginalContent();
 
-        $this->assertEquals($categories[0]->slug , $response['category']['category_slug']);
+        $this->assertEquals($categories[0]->slug, $response['category']['category_slug']);
+    }
+
+    /** @test */
+    public function auth_user_can_save_new_category()
+    {
+        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
+
+        $this->signIn($jonh);
+
+        $category = factory(Category::class)->make();
+
+        $response = $this
+            ->post('/api/category', $category->toArray());
+
+        $this->assertDatabaseHas('categories', [
+            'name' => $category->name
+        ]);
+
+        $this->get($response->headers->get('Location'))
+            ->assertSee($category->name);
     }
 
 

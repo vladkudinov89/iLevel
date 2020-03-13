@@ -23,6 +23,8 @@ Route::group(['middleware' => 'auth'], function () {
         return redirect()->route('shop.index');
     });
 
-    Route::get( '/' ,'ShopController@index')->name('shop.index');
-    Route::get( '/category/{category}' ,'ShopController@show')->name('shop.show');
+    Route::get('/', 'ShopController@index')->name('shop.index');
+    Route::get('/category/create', 'ShopController@create')->name('shop.create');
+    Route::get('/category/{category}', 'ShopController@show')->name('shop.show');
+
 });

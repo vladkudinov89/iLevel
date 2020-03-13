@@ -20,7 +20,9 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function save(Category $category): Category
     {
-        // TODO: Implement save() method.
+        $category->save();
+
+        return $category;
     }
 
     public function deleteById(int $id): void

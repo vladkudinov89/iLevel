@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,16 +13,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
-Route::delete('hello/{name}', function ($name){
-    return [
-        'name' => $name,
-        'status' => 'deleted'
-    ];
-});
-
+Route::post('/category', 'Api\\ShopController@store_category')->name('shop.store.category');
 

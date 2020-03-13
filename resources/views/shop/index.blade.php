@@ -3,16 +3,24 @@
 @section('content')
 
     @if (session('status'))
-        <div class="alert alert-success" role="alert">
+        <div class="alert alert-success">
             {{ session('status') }}
         </div>
     @endif
 
-
-
     <div class="container">
 
         <h1 class="text-center">SHOP</h1>
+
+        <div class="form-group">
+
+            <div class="pull-left">
+                <a href="{{route('shop.create')}}" class="btn btn-success btn-md">Add Category</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
 
         <ul class="nav justify-content-center mb-5">
             @foreach($categories as $category)
@@ -29,29 +37,29 @@
 
 
             <div class="card-columns">
-            @forelse ($products as $product)
-                <div class="card" style="width: 18rem;">
+                @forelse ($products as $product)
+                    <div class="card" style="width: 18rem;">
 
-                    <div class="card-body">
-                        <h5 class="card-title">{{$product['product_name']}}</h5>
-                        <p class="card-text">Some quick content.</p>
+                        <div class="card-body">
+                            <h5 class="card-title">{{$product['product_name']}}</h5>
+                            <p class="card-text">Some quick content.</p>
 
-                        <p>Categories:
-                        @foreach($product['product_category'] as $pr_category)
-                            <a href="{{route('shop.show' , $pr_category['slug'])}}" class="">
-                                {{$pr_category['name']}}
-                            </a>
-                        @endforeach
-                        </p>
-                        <a href="#" class="btn btn-primary">Show</a>
+                            <p>Categories:
+                                @foreach($product['product_category'] as $pr_category)
+                                    <a href="{{route('shop.show' , $pr_category['slug'])}}" class="">
+                                        {{$pr_category['name']}}
+                                    </a>
+                                @endforeach
+                            </p>
+                            <a href="#" class="btn btn-primary">Show</a>
 
 
+                        </div>
                     </div>
-                </div>
-            @empty
-                <p>No products</p>
-            @endforelse
-        </div>
+                @empty
+                    <p>No products</p>
+                @endforelse
+            </div>
         </div>
     </div>
 
