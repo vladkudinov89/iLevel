@@ -10,7 +10,7 @@ interface CategoryRepositoryInterface
 {
     public function findAll(): Collection;
 
-    public function getById(int $id): ?Category;
+    public function getBySlug(string $slug): Collection;
 
     public function save(Category $category): Category;
 

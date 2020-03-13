@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductAction;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductRequest;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductResponse;
-use App\Actions\Presenter\CategoryPresenter;
-use App\Entities\Category;
-use App\Entities\Product;
+use App\Actions\Category\GetCategoryAndProductBySlug\GetCategoryAndProductBySlugAction;
+use App\Actions\Category\GetCategoryAndProductBySlug\GetCategoryAndProductBySlugRequest;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -20,15 +19,21 @@ class ShopController extends Controller
      * @var GetCategoryAndProductResponse
      */
     private $categoryAndProductResponse;
+    /**
+     * @var GetCategoryAndProductBySlugAction
+     */
+    private $categoryAndProductBySlugAction;
 
     /**
      * ShopController constructor.
      */
     public function __construct(
-        GetCategoryAndProductAction $categoryAndProductAction
+        GetCategoryAndProductAction $categoryAndProductAction,
+        GetCategoryAndProductBySlugAction $categoryAndProductBySlugAction
     )
     {
         $this->categoryAndProductAction = $categoryAndProductAction;
+        $this->categoryAndProductBySlugAction = $categoryAndProductBySlugAction;
     }
 
     public function index()
@@ -68,9 +73,16 @@ class ShopController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(string $slug)
     {
+        $responseCategoryAndProductResponse = $this->categoryAndProductBySlugAction
+            ->execute(
+                new GetCategoryAndProductBySlugRequest($slug)
+            );
 
+        return view('shop.show' , [
+            'category' => $responseCategoryAndProductResponse->categories()
+        ]);
     }
 
     /**

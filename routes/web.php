@@ -24,4 +24,5 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get( '/' ,'ShopController@index')->name('shop.index');
+    Route::get( '/category/{category}' ,'ShopController@show')->name('shop.show');
 });

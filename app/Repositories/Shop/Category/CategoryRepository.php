@@ -13,9 +13,9 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::all();
     }
 
-    public function getById(int $id): ?Category
+    public function getBySlug(string $slug): Collection
     {
-        // TODO: Implement getById() method.
+        return Category::where('slug' , $slug)->get();
     }
 
     public function save(Category $category): Category
