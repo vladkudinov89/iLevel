@@ -3,12 +3,12 @@
 
 namespace App\Repositories\Shop\Product;
 
-
+use Illuminate\Database\Eloquent\Collection;
 use App\Entities\Product;
 
 interface ProductRepositoryInterface
 {
-    public function findAll();
+    public function findAll() :Collection;
 
     public function getById(int $id): ?Product;
 
