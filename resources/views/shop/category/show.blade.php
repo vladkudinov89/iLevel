@@ -20,7 +20,7 @@
                         <div class="card-body">
                             <h5 class="card-title">{{$product->name}}</h5>
                             <p class="card-text">Some quick content.</p>
-                            <a href="#" class="btn btn-primary">Go somewhere</a>
+                            <a href="{{route('shop.product.show' , $product['slug'])}}" class="btn btn-primary">Show Product</a>
                         </div>
                     </div>
                 @empty
