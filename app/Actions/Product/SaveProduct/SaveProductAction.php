@@ -27,13 +27,13 @@ class SaveProductAction
     {
         $productSave = new Product([
             'name' => $request->getName(),
+            'slug' =>  strtolower(str_slug($request->getName())),
             'price' => $request->getPrice(),
             'amount' => $request->getAmount()
         ]);
 
         $product = $this->productRepository->save($productSave);
 
-//        dd($request->getCategories());
         foreach ($request->getCategories() as $category) {
             $product->categories()->attach($category);
         }
