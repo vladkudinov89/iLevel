@@ -14,5 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/category', 'Api\\ShopController@store_category')->name('shop.store.category');
+Route::put('/category/{category}', 'Api\\ShopController@update_category')->name('shop.category.update');
+
 Route::post('/product', 'Api\\ShopController@store_product')->name('shop.store.product');
 

@@ -10,17 +10,22 @@ use Tests\TestCase;
 
 class ShopControllerTest extends TestCase
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->signIn(factory(User::class)->create(['name' => 'JohnDoe']));
+    }
+
     use RefreshDatabase;
+
+
 
     /** @test */
     public function test_get_all_tasks_index()
     {
-        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
-
         $categories = $this->shopping();
 
         $response = $this
-            ->signIn($jonh)
             ->get('/')
             ->assertStatus(200)
             ->getOriginalContent();
@@ -32,12 +37,9 @@ class ShopControllerTest extends TestCase
     /** @test */
     public function get_category_by_slug()
     {
-        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
-
         $categories = $this->shopping();
 
         $response = $this
-            ->signIn($jonh)
             ->get('/category/' . $categories[0]->slug)
             ->assertStatus(200)
             ->getOriginalContent();
@@ -48,10 +50,6 @@ class ShopControllerTest extends TestCase
     /** @test */
     public function auth_user_can_create_category()
     {
-        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
-
-        $this->signIn($jonh);
-
         $category = factory(Category::class)->make();
 
         $response = $this
@@ -68,12 +66,7 @@ class ShopControllerTest extends TestCase
     /** @test */
     public function auth_user_can_create_product()
     {
-        $this->withoutExceptionHandling();
-        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
-
-        $this->signIn($jonh);
-
-        $categories = factory(Category::class ,2 )->create();
+        $categories = factory(Category::class, 2)->create();
         $product = factory(Product::class)->make(['id' => 1]);
 
         $response = $this
@@ -81,7 +74,7 @@ class ShopControllerTest extends TestCase
                 'name' => $product->name,
                 'price' => $product->price,
                 'amount' => $product->amount,
-                'categories' => array([$categories[0]->id,$categories[1]->id])
+                'categories' => array([$categories[0]->id, $categories[1]->id])
             ]);
 
         $this->assertDatabaseHas('products', [
@@ -98,6 +91,22 @@ class ShopControllerTest extends TestCase
             ]);
         }
     }
+
+    /** @test */
+    public function auth_user_can_update_catalog()
+    {
+        $category = factory(Category::class)->create();
+
+        $response = $this
+            ->put('/api/category/' . $category->slug, [
+                'name' => 'category_changed'
+            ]);
+
+        $this->assertDatabaseHas('categories', [
+            'name' => 'category_changed'
+        ]);
+    }
+
 
     private function shopping()
     {
