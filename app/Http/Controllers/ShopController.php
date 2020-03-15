@@ -97,7 +97,7 @@ class ShopController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Category $category)
+    public function category_show(Category $category)
     {
         $responseCategoryAndProductResponse = $this->categoryAndProductBySlugAction
             ->execute(
@@ -125,9 +125,16 @@ class ShopController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function category_edit(Category $category)
     {
-        //
+        $responseCategoryAndProductResponse = $this->categoryAndProductBySlugAction
+            ->execute(
+                new GetCategoryAndProductBySlugRequest($category->slug)
+            );
+
+        return view('shop.category.edit', [
+            'category' => $responseCategoryAndProductResponse->categories()
+        ]);
     }
 
     /**

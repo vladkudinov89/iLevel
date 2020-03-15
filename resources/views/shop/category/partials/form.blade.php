@@ -1,4 +1,3 @@
-
 @csrf
 
 <div class="field mb-6">
@@ -8,12 +7,12 @@
         <input
             type="text"
             class="input bg-transparent border border-muted-light rounded p-2 text-xs w-full
- @if($errors->has('name')) error @endif"
+            @if($errors->has('name')) error @endif"
             name="name"
             placeholder="Category Title"
             required
-            value="@if(old('name')){{old('name')}}@endif"
-           >
+            value="@if(old('name')){{old('name')}}@else{{ $category['category_name'] ?? ""  }}@endif"
+        >
     </div>
 
     @if($errors->has('name'))
