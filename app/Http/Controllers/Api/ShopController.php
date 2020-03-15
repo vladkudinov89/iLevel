@@ -8,7 +8,6 @@ use App\Actions\Category\SaveCategory\SaveCategoryAction;
 use App\Actions\Category\SaveCategory\SaveCategoryRequest;
 use App\Actions\Product\SaveProduct\SaveProductAction;
 use App\Actions\Product\SaveProduct\SaveProductRequest;
-use App\Actions\Product\SaveProduct\SaveProductResponse;
 use App\Http\Requests\ValidateSaveCategoryRequest;
 use App\Http\Requests\ValidateSaveProductRequest;
 use Illuminate\Http\JsonResponse;

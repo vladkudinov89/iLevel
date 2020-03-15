@@ -15,7 +15,7 @@
         <div class="form-group">
 
             <div class="pull-left">
-                <a href="{{route('shop.create')}}" class="btn btn-success btn-md">Add Category</a>
+                <a href="{{route('shop.category.create')}}" class="btn btn-success btn-md">Add Category</a>
             </div>
 
             <div class="clearfix"></div>
@@ -35,7 +35,7 @@
             @foreach($categories as $category)
                 <li class="nav-item">
                     <a class="nav-link active"
-                       href="{{route('shop.show' , $category['category_slug'])}}">
+                       href="{{route('shop.category.show' , $category['category_slug'])}}">
                         {{$category['category_name']}} ( {{$category['category_products']}} )
                     </a>
                 </li>
@@ -55,7 +55,7 @@
 
                             <p>Categories:
                                 @foreach($product['product_category'] as $pr_category)
-                                    <a href="{{route('shop.show' , $pr_category['slug'])}}" class="">
+                                    <a href="{{route('shop.category.show' , $pr_category['slug'])}}" class="">
                                         {{$pr_category['name']}}
                                     </a>
                                 @endforeach

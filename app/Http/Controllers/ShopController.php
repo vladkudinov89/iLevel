@@ -94,7 +94,7 @@ class ShopController extends Controller
                 new GetCategoryAndProductBySlugRequest($slug)
             );
 
-        return view('shop.show' , [
+        return view('shop.category.show' , [
             'category' => $responseCategoryAndProductResponse->categories()
         ]);
     }

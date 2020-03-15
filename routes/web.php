@@ -24,8 +24,8 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::get('/', 'ShopController@index')->name('shop.index');
-    Route::get('/category/create', 'ShopController@create')->name('shop.create');
+    Route::get('/category/create', 'ShopController@create')->name('shop.category.create');
     Route::get('/product/create', 'ShopController@product_create')->name('shop.product.create');
-    Route::get('/category/{category}', 'ShopController@show')->name('shop.show');
+    Route::get('/category/{category}', 'ShopController@show')->name('shop.category.show');
 
 });
