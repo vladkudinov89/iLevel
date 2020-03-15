@@ -13,6 +13,12 @@ class ProductRepository implements ProductRepositoryInterface
         return Product::all();
     }
 
+    public function getBySlug(string $slug): Collection
+    {
+        return Product::where('slug' , $slug)->get();
+    }
+
+
     public function getById(int $id): ?Product
     {
         // TODO: Implement getById() method.

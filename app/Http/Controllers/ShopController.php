@@ -8,6 +8,10 @@ use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductRequest;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductResponse;
 use App\Actions\Category\GetCategoryAndProductBySlug\GetCategoryAndProductBySlugAction;
 use App\Actions\Category\GetCategoryAndProductBySlug\GetCategoryAndProductBySlugRequest;
+use App\Actions\Product\GetSingleProduct\GetSingleProductAction;
+use App\Actions\Product\GetSingleProduct\GetSingleProductRequest;
+use App\Entities\Category;
+use App\Entities\Product;
 use Illuminate\Http\Request;
 
 class ShopController extends Controller
@@ -28,6 +32,10 @@ class ShopController extends Controller
      * @var GetCategoryAction
      */
     private $getCategoryAction;
+    /**
+     * @var GetSingleProductAction
+     */
+    private $getSingleProductAction;
 
     /**
      * ShopController constructor.
@@ -35,12 +43,14 @@ class ShopController extends Controller
     public function __construct(
         GetCategoryAndProductAction $categoryAndProductAction,
         GetCategoryAndProductBySlugAction $categoryAndProductBySlugAction,
-        GetCategoryAction $getCategoryAction
+        GetCategoryAction $getCategoryAction,
+        GetSingleProductAction $getSingleProductAction
     )
     {
         $this->categoryAndProductAction = $categoryAndProductAction;
         $this->categoryAndProductBySlugAction = $categoryAndProductBySlugAction;
         $this->getCategoryAction = $getCategoryAction;
+        $this->getSingleProductAction = $getSingleProductAction;
     }
 
     public function index()
@@ -65,7 +75,7 @@ class ShopController extends Controller
 
     public function product_create()
     {
-        return view('shop.product.create' , [
+        return view('shop.product.create', [
             'categories' => $this->getCategoryAction->execute()->categories()
         ]);
     }
@@ -87,15 +97,25 @@ class ShopController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(string $slug)
+    public function show(Category $category)
     {
         $responseCategoryAndProductResponse = $this->categoryAndProductBySlugAction
             ->execute(
-                new GetCategoryAndProductBySlugRequest($slug)
+                new GetCategoryAndProductBySlugRequest($category->slug)
             );
 
-        return view('shop.category.show' , [
+        return view('shop.category.show', [
             'category' => $responseCategoryAndProductResponse->categories()
+        ]);
+    }
+
+    public function product_show(Product $product)
+    {
+        $responeSingleProduct = $this->getSingleProductAction->execute(new GetSingleProductRequest($product));
+
+        return view('shop.product.show', [
+            'categories' => $responeSingleProduct->categories(),
+            'product' => $responeSingleProduct->product()
         ]);
     }
 

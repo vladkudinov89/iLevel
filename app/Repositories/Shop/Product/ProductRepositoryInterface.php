@@ -8,7 +8,9 @@ use App\Entities\Product;
 
 interface ProductRepositoryInterface
 {
-    public function findAll() :Collection;
+    public function findAll(): Collection;
+
+    public function getBySlug(string $slug): Collection;
 
     public function getById(int $id): ?Product;
 
