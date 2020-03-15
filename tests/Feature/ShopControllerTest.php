@@ -17,16 +17,7 @@ class ShopControllerTest extends TestCase
     {
         $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
 
-        $categories = factory(Category::class, 4)
-            ->create()
-            ->each(function ($category) {
-                $category
-                    ->products()
-                    ->saveMany(
-                        factory(Product::class, 3)
-                            ->make()
-                    );
-            });
+        $categories = $this->shopping();
 
         $response = $this
             ->signIn($jonh)
@@ -43,16 +34,7 @@ class ShopControllerTest extends TestCase
     {
         $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
 
-        $categories = factory(Category::class, 4)
-            ->create()
-            ->each(function ($category) {
-                $category
-                    ->products()
-                    ->saveMany(
-                        factory(Product::class, 3)
-                            ->make()
-                    );
-            });
+        $categories = $this->shopping();
 
         $response = $this
             ->signIn($jonh)
@@ -64,7 +46,7 @@ class ShopControllerTest extends TestCase
     }
 
     /** @test */
-    public function auth_user_can_save_new_category()
+    public function auth_user_can_create_category()
     {
         $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
 
@@ -83,5 +65,52 @@ class ShopControllerTest extends TestCase
             ->assertSee($category->name);
     }
 
+    /** @test */
+    public function auth_user_can_create_product()
+    {
+        $this->withoutExceptionHandling();
+        $jonh = factory(User::class)->create(['name' => 'JohnDoe']);
+
+        $this->signIn($jonh);
+
+        $categories = factory(Category::class ,2 )->create();
+        $product = factory(Product::class)->make(['id' => 1]);
+
+        $response = $this
+            ->post('/api/product', [
+                'name' => $product->name,
+                'price' => $product->price,
+                'amount' => $product->amount,
+                'categories' => array([$categories[0]->id,$categories[1]->id])
+            ]);
+
+        $this->assertDatabaseHas('products', [
+            'name' => $product->name
+        ]);
+
+        $this->get($response->headers->get('Location'))
+            ->assertSee($product->name);
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseHas('category_product', [
+                'product_id' => $product->id,
+                'category_id' => $category->id,
+            ]);
+        }
+    }
+
+    private function shopping()
+    {
+        return factory(Category::class, 4)
+            ->create()
+            ->each(function ($category) {
+                $category
+                    ->products()
+                    ->saveMany(
+                        factory(Product::class, 3)
+                            ->make()
+                    );
+            });
+    }
 
 }

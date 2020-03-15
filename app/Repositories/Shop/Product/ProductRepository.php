@@ -20,7 +20,9 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function save(Product $product): Product
     {
-        // TODO: Implement save() method.
+        $product->save();
+
+        return $product;
     }
 
     public function deleteById(int $id): void

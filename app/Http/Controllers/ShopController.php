@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Category\GetCategory\GetCategoryAction;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductAction;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductRequest;
 use App\Actions\Category\GetCategoryAndProduct\GetCategoryAndProductResponse;
@@ -23,17 +24,23 @@ class ShopController extends Controller
      * @var GetCategoryAndProductBySlugAction
      */
     private $categoryAndProductBySlugAction;
+    /**
+     * @var GetCategoryAction
+     */
+    private $getCategoryAction;
 
     /**
      * ShopController constructor.
      */
     public function __construct(
         GetCategoryAndProductAction $categoryAndProductAction,
-        GetCategoryAndProductBySlugAction $categoryAndProductBySlugAction
+        GetCategoryAndProductBySlugAction $categoryAndProductBySlugAction,
+        GetCategoryAction $getCategoryAction
     )
     {
         $this->categoryAndProductAction = $categoryAndProductAction;
         $this->categoryAndProductBySlugAction = $categoryAndProductBySlugAction;
+        $this->getCategoryAction = $getCategoryAction;
     }
 
     public function index()
@@ -54,6 +61,13 @@ class ShopController extends Controller
     public function create()
     {
         return view('shop.create');
+    }
+
+    public function product_create()
+    {
+        return view('shop.product.create' , [
+            'categories' => $this->getCategoryAction->execute()->categories()
+        ]);
     }
 
     /**

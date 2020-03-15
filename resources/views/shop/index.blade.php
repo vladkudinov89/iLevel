@@ -21,6 +21,15 @@
             <div class="clearfix"></div>
 
         </div>
+<div class="form-group">
+
+            <div class="pull-left">
+                <a href="{{route('shop.product.create')}}" class="btn btn-success btn-md">Add Product</a>
+            </div>
+
+            <div class="clearfix"></div>
+
+        </div>
 
         <ul class="nav justify-content-center mb-5">
             @foreach($categories as $category)

@@ -6,7 +6,6 @@ namespace App\Actions\Category\GetCategoryAndProduct;
 
 use App\Actions\Presenter\CategoryPresenter;
 use App\Actions\Presenter\ProductPresenter;
-use App\Repositories\Shop\Category\CategoryRepository;
 use App\Repositories\Shop\Category\CategoryRepositoryInterface;
 use App\Repositories\Shop\Product\ProductRepositoryInterface;
 
@@ -42,8 +41,6 @@ class GetCategoryAndProductAction
         foreach ($products as $product) {
             $products1[] = ProductPresenter::present($product);
         }
-
-//        $categoriesPresenter
 
         return new GetCategoryAndProductResponse($categories1 , $products1);
 
