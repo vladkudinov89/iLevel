@@ -21,7 +21,7 @@
             <div class="clearfix"></div>
 
         </div>
-<div class="form-group">
+        <div class="form-group">
 
             <div class="pull-left">
                 <a href="{{route('shop.product.create')}}" class="btn btn-success btn-md">Add Product</a>
@@ -60,7 +60,7 @@
                                     </a>
                                 @endforeach
                             </p>
-                            <a href="#" class="btn btn-primary">Show</a>
+                            <a href="{{route('shop.product.show' ,$product['product_slug'] )}}" class="btn btn-primary">Show</a>
 
 
                         </div>
