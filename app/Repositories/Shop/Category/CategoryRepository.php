@@ -18,6 +18,12 @@ class CategoryRepository implements CategoryRepositoryInterface
         return Category::where('slug' , $slug)->get();
     }
 
+    public function getById(int $id): ?Category
+    {
+        return Category::find($id);
+    }
+
+
     public function save(Category $category): Category
     {
         $category->save();
