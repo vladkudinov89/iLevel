@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/category', 'Api\\ShopController@store_category')->name('shop.store.category');
 Route::put('/category/{category}', 'Api\\ShopController@update_category')->name('shop.category.update');
+Route::delete('/category/{id}', 'Api\\ShopController@category_destroy')->name('shop.category.destroy');
 
 Route::post('/product', 'Api\\ShopController@store_product')->name('shop.store.product');
 Route::put('/product/{product}', 'Api\\ShopController@update_product')->name('shop.product.update');

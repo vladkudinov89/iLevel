@@ -4,6 +4,8 @@
 namespace App\Http\Controllers\Api;
 
 
+use App\Actions\Category\DeleteCategory\DeleteCategoryAction;
+use App\Actions\Category\DeleteCategory\DeleteCategoryRequest;
 use App\Actions\Category\SaveCategory\SaveCategoryAction;
 use App\Actions\Category\SaveCategory\SaveCategoryRequest;
 use App\Actions\Category\UpdateCategory\UpdateCategoryAction;
@@ -44,6 +46,10 @@ class ShopController
      * @var DeleteProductAction
      */
     private $deleteProductAction;
+    /**
+     * @var DeleteCategoryAction
+     */
+    private $deleteCategoryAction;
 
     /**
      * ShopController constructor.
@@ -53,7 +59,8 @@ class ShopController
         SaveProductAction $saveProductAction,
         UpdateCategoryAction $updateCategoryAction,
         UpdateProductAction $updateProductAction,
-    DeleteProductAction $deleteProductAction
+        DeleteProductAction $deleteProductAction,
+        DeleteCategoryAction $deleteCategoryAction
     )
     {
         $this->saveCategoryAction = $saveCategoryAction;
@@ -61,6 +68,7 @@ class ShopController
         $this->updateCategoryAction = $updateCategoryAction;
         $this->updateProductAction = $updateProductAction;
         $this->deleteProductAction = $deleteProductAction;
+        $this->deleteCategoryAction = $deleteCategoryAction;
     }
 
     public function store_category(ValidateSaveCategoryRequest $request)
@@ -134,17 +142,28 @@ class ShopController
         return redirect()->route('shop.product.show', $updateProduct->getProductSlug());
     }
 
-    public function product_destroy(int $product)
+    public function category_destroy(int $catalog)
     {
-//        dd($product);
-       $this->deleteProductAction->execute(new DeleteProductRequest($product));
+        $this->deleteCategoryAction->execute(new DeleteCategoryRequest($catalog));
 
         if (request()->wantsJson()) {
             return $this->emptyResponse(200);
         }
 
         return redirect()->route('shop.index')
-            ->with('status' , 'Product Success Deleted!');
+            ->with('status', 'Category Success Deleted!');
+    }
+
+    public function product_destroy(int $product)
+    {
+        $this->deleteProductAction->execute(new DeleteProductRequest($product));
+
+        if (request()->wantsJson()) {
+            return $this->emptyResponse(200);
+        }
+
+        return redirect()->route('shop.index')
+            ->with('status', 'Product Success Deleted!');
     }
 
     protected function successResponse(array $data, int $statusCode = JsonResponse::HTTP_OK): JsonResponse

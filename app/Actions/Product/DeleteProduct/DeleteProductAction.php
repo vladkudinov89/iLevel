@@ -31,13 +31,10 @@ class DeleteProductAction
         }
 
         if(isset($product->categories)){
-//            dd($product->categories());
             foreach ($product->categories as $category) {
-//                dd($category);
                 $product->categories()->detach($category);
             }
         }
-
 
         $this->productRepository->deleteById($product->id);
     }

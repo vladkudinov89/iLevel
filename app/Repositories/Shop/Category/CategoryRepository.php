@@ -33,7 +33,7 @@ class CategoryRepository implements CategoryRepositoryInterface
 
     public function deleteById(int $id): void
     {
-        // TODO: Implement deleteById() method.
+        Category::destroy($id);
     }
 
 }

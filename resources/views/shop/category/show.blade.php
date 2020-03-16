@@ -24,9 +24,18 @@
 
                 <div class="form-group">
 
-                    <div class="pull-left">
-                        <a href="{{route('shop.category.update' , $category['category_slug'])}}" class="btn btn-danger btn-md">Delete Category</a>
-                    </div>
+{{--                    <div class="pull-left">--}}
+{{--                        <a href="{{route('shop.category.destroy' , $category['category_id'])}}" class="btn btn-danger btn-md">Delete Category</a>--}}
+{{--                    </div>--}}
+
+                    <form action="{{route('shop.category.destroy' , $category['category_id'])}}" method="POST">
+                        {{ csrf_field() }}
+                        {{ method_field('DELETE') }}
+
+                        <button class="btn btn-danger" type="submit">
+                            Delete Category
+                        </button>
+                    </form>
 
                 </div>
             </div>

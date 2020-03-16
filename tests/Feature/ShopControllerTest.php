@@ -175,6 +175,21 @@ class ShopControllerTest extends TestCase
         }
     }
 
+    /** @test */
+    public function auth_user_can_delete_category()
+    {
+        $categories = $this->shopping();
+
+        $response = $this
+            ->delete('/api/category/' . $categories[0]->id);
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseMissing('category_product', [
+                'category_id' => $categories[0]->id
+            ]);
+        }
+    }
+
 
     private function shopping()
     {
