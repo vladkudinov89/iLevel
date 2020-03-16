@@ -4,6 +4,7 @@
 namespace App\Actions\Category\GetCategory;
 
 
+use App\Actions\Presenter\CategoryPresenter;
 use App\Repositories\Shop\Category\CategoryRepositoryInterface;
 
 class GetCategoryAction
@@ -24,6 +25,11 @@ class GetCategoryAction
 
     public function execute(): GetCategoryResponse
     {
-        return new GetCategoryResponse($this->categoryRepository->findAll());
+        $categories = $this->categoryRepository->findAll();
+        foreach ($categories as $category) {
+            $categories1[] = CategoryPresenter::arrayPresent($category);
+        }
+
+        return new GetCategoryResponse($categories1);
     }
 }

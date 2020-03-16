@@ -21,7 +21,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function getById(int $id): ?Product
     {
-        // TODO: Implement getById() method.
+        return Product::find($id);
     }
 
     public function save(Product $product): Product

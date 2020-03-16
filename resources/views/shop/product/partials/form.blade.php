@@ -1,4 +1,3 @@
-
 @csrf
 
 @if ($errors->any())
@@ -22,8 +21,8 @@
             name="name"
             placeholder="Product Title"
             required
-            value="@if(old('name')){{old('name')}}@endif"
-           >
+            value="@if(old('name')){{old('name')}}@else{{ $product['product_name'] ?? ""  }}@endif"
+        >
     </div>
 
     @if($errors->has('name'))
@@ -42,8 +41,8 @@
             name="price"
             placeholder="Product Price"
             required
-            value="@if(old('price')){{old('price')}}@endif"
-           >
+            value="@if(old('price')){{old('price')}}@else{{ $product['product_price'] ?? ""  }}@endif"
+        >
     </div>
 
     @if($errors->has('price'))
@@ -62,8 +61,8 @@
             name="amount"
             placeholder="Product Amount"
             required
-            value="@if(old('amount')){{old('amount')}}@endif"
-           >
+            value="@if(old('amount')){{old('amount')}}@else{{ $product['product_amount'] ?? ""  }}@endif"
+        >
     </div>
 
     @if($errors->has('amount'))
@@ -73,14 +72,24 @@
 
 
 <div class="field mb-6">
-    <label class="label text-sm mb-2 block" for="title">Producrt Category</label>
+    <label class="label text-sm mb-2 block" for="title">Product Category</label>
     <div class="control">
-        <select name="categories[]" multiple="multiple"  id="categories">
 
-            @foreach($categories as $category)
-                <option value='{{ $category->id }}'
-                    {{old('category_id') == $category->id ? 'selected' : ''}}
-                >{{ $category->name }}</option>
+        <select name="categories[]" multiple="multiple" id="categories">
+
+            @foreach($categories as $key => $category)
+
+                <option value='{{ $category['category_id'] }}'
+
+                        @foreach($product['product_categories'] ?? [] as $product_category)
+
+                        @if ($product_category['id'] ==  $category['category_id'])
+                        selected="selected"
+                         @endif
+
+                    @endforeach
+
+                >{{ $category['category_name'] }}</option>
             @endforeach
         </select>
     </div>
@@ -89,7 +98,7 @@
 
 <div class="field mb-6">
     <div class="control">
-        <button type="submit" class="btn btn-primary">Add Product</button>
+        <button type="submit" class="btn btn-primary">Save Product</button>
 
         <a href="/" class="text-default">Cancel</a>
     </div>

@@ -28,4 +28,12 @@ class CategoryPresenter
             'category_products' => $category[0]->products
         ];
     }
+
+    public static function arrayPresent(Category $category)
+    {
+        return [
+            'category_id' => $category->id,
+            'category_name' => $category->name,
+        ];
+    }
 }

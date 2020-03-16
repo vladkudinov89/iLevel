@@ -25,7 +25,9 @@ class ProductPresenter
             'product_id' => $product[0]->id,
             'product_name' => $product[0]->name,
             'product_slug' => $product[0]->slug,
-            'product_categories' => $product[0]->categories
+            'product_price' => $product[0]->price,
+            'product_amount' => $product[0]->amount,
+            'product_categories' => $product[0]->categories->toArray()
         ];
     }
 }

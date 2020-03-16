@@ -17,4 +17,4 @@ Route::post('/category', 'Api\\ShopController@store_category')->name('shop.store
 Route::put('/category/{category}', 'Api\\ShopController@update_category')->name('shop.category.update');
 
 Route::post('/product', 'Api\\ShopController@store_product')->name('shop.store.product');
-
+Route::put('/product/{product}', 'Api\\ShopController@update_product')->name('shop.product.update');

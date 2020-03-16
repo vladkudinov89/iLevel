@@ -70,7 +70,7 @@ class ShopController extends Controller
      */
     public function create()
     {
-        return view('shop.create');
+        return view('shop.category.create');
     }
 
     public function product_create()
@@ -134,6 +134,16 @@ class ShopController extends Controller
 
         return view('shop.category.edit', [
             'category' => $responseCategoryAndProductResponse->categories()
+        ]);
+    }
+
+    public function product_edit(Product $product)
+    {
+        $responseSingleProduct = $this->getSingleProductAction->execute(new GetSingleProductRequest($product));
+
+        return view('shop.product.edit', [
+            'categories' => $this->categoryAndProductAction->execute(new GetCategoryAndProductRequest())->categories(),
+            'product' => $responseSingleProduct->product()
         ]);
     }
 

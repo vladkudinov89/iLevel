@@ -19,7 +19,6 @@ class ShopControllerTest extends TestCase
     use RefreshDatabase;
 
 
-
     /** @test */
     public function test_get_all_tasks_index()
     {
@@ -105,6 +104,36 @@ class ShopControllerTest extends TestCase
         $this->assertDatabaseHas('categories', [
             'name' => 'category_changed'
         ]);
+    }
+
+    /** @test */
+    public function auth_user_can_update_product()
+    {
+        $this->withoutExceptionHandling();
+        $categories = factory(Category::class, 2)->create();
+
+        $product = factory(Product::class)->create();
+
+        $response = $this
+            ->put('/api/product/' . $product->slug, [
+                'name' => 'product1',
+                'price' => 999,
+                'amount' => 10,
+                'categories' => array([$categories[0]->id, $categories[1]->id])
+            ]);
+
+        $this->assertDatabaseHas('products', [
+            'name' => 'product1',
+            'price' => 999,
+            'amount' => 10
+        ]);
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseHas('category_product', [
+                'product_id' => $product->id,
+                'category_id' => $category->id,
+            ]);
+        }
     }
 
 

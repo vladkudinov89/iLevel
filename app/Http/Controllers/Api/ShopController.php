@@ -10,10 +10,14 @@ use App\Actions\Category\UpdateCategory\UpdateCategoryAction;
 use App\Actions\Category\UpdateCategory\UpdateCategoryRequest;
 use App\Actions\Product\SaveProduct\SaveProductAction;
 use App\Actions\Product\SaveProduct\SaveProductRequest;
+use App\Actions\Product\UpdateProduct\UpdateProductAction;
+use App\Actions\Product\UpdateProduct\UpdateProductRequest;
 use App\Entities\Category;
+use App\Entities\Product;
 use App\Http\Requests\ValidateSaveCategoryRequest;
 use App\Http\Requests\ValidateSaveProductRequest;
 use App\Http\Requests\ValidateUpdateCategoryRequest;
+use App\Http\Requests\ValidateUpdateProductRequest;
 use Illuminate\Http\JsonResponse;
 
 class ShopController
@@ -30,6 +34,10 @@ class ShopController
      * @var UpdateCategoryAction
      */
     private $updateCategoryAction;
+    /**
+     * @var UpdateProductAction
+     */
+    private $updateProductAction;
 
     /**
      * ShopController constructor.
@@ -37,12 +45,14 @@ class ShopController
     public function __construct(
         SaveCategoryAction $saveCategoryAction,
         SaveProductAction $saveProductAction,
-        UpdateCategoryAction $updateCategoryAction
+        UpdateCategoryAction $updateCategoryAction,
+        UpdateProductAction $updateProductAction
     )
     {
         $this->saveCategoryAction = $saveCategoryAction;
         $this->saveProductAction = $saveProductAction;
         $this->updateCategoryAction = $updateCategoryAction;
+        $this->updateProductAction = $updateProductAction;
     }
 
     public function store_category(ValidateSaveCategoryRequest $request)
@@ -52,7 +62,7 @@ class ShopController
             $categorySave = $this->saveCategoryAction->execute(new SaveCategoryRequest(
                 $request->name
             ));
-        }  catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->$e->getCode();
         }
 
@@ -61,7 +71,7 @@ class ShopController
         }
 
         return redirect()->route('shop.index')
-            ->with('status' , 'New category created.');
+            ->with('status', 'New category created.');
     }
 
     public function store_product(ValidateSaveProductRequest $request)
@@ -73,7 +83,7 @@ class ShopController
                 $request->amount,
                 $request->categories
             ));
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return $this->$e->getCode();
         }
 
@@ -82,10 +92,10 @@ class ShopController
         }
 
         return redirect()->route('shop.index')
-            ->with('status' , 'New product created.');
+            ->with('status', 'New product created.');
     }
 
-    public function update_category(ValidateUpdateCategoryRequest $request , Category $category)
+    public function update_category(ValidateUpdateCategoryRequest $request, Category $category)
     {
         $updateCategoryResponse = $this->updateCategoryAction->execute(new UpdateCategoryRequest(
             $category->id,
@@ -96,7 +106,24 @@ class ShopController
             return $this->successResponse($updateCategoryResponse->toArray(), 201);
         }
 
-        return redirect()->route('shop.category.show' , $updateCategoryResponse->getCatalogSlug());
+        return redirect()->route('shop.category.show', $updateCategoryResponse->getCatalogSlug());
+    }
+
+    public function update_product(ValidateUpdateProductRequest $request, Product $product)
+    {
+        $updateProduct = $this->updateProductAction->execute(new UpdateProductRequest(
+            $product->id,
+            $request->name,
+            $request->price,
+            $request->amount,
+            $request->categories
+        ));
+
+        if (request()->wantsJson()) {
+            return $this->successResponse($updateProduct->toArray(), 201);
+        }
+
+        return redirect()->route('shop.product.show', $updateProduct->getProductSlug());
     }
 
     protected function successResponse(array $data, int $statusCode = JsonResponse::HTTP_OK): JsonResponse
