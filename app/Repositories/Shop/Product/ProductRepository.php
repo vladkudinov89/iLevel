@@ -33,7 +33,7 @@ class ProductRepository implements ProductRepositoryInterface
 
     public function deleteById(int $id): void
     {
-        // TODO: Implement deleteById() method.
+        Product::destroy($id);
     }
 
 }

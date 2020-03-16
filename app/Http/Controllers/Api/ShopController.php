@@ -8,6 +8,8 @@ use App\Actions\Category\SaveCategory\SaveCategoryAction;
 use App\Actions\Category\SaveCategory\SaveCategoryRequest;
 use App\Actions\Category\UpdateCategory\UpdateCategoryAction;
 use App\Actions\Category\UpdateCategory\UpdateCategoryRequest;
+use App\Actions\Product\DeleteProduct\DeleteProductAction;
+use App\Actions\Product\DeleteProduct\DeleteProductRequest;
 use App\Actions\Product\SaveProduct\SaveProductAction;
 use App\Actions\Product\SaveProduct\SaveProductRequest;
 use App\Actions\Product\UpdateProduct\UpdateProductAction;
@@ -38,6 +40,10 @@ class ShopController
      * @var UpdateProductAction
      */
     private $updateProductAction;
+    /**
+     * @var DeleteProductAction
+     */
+    private $deleteProductAction;
 
     /**
      * ShopController constructor.
@@ -46,13 +52,15 @@ class ShopController
         SaveCategoryAction $saveCategoryAction,
         SaveProductAction $saveProductAction,
         UpdateCategoryAction $updateCategoryAction,
-        UpdateProductAction $updateProductAction
+        UpdateProductAction $updateProductAction,
+    DeleteProductAction $deleteProductAction
     )
     {
         $this->saveCategoryAction = $saveCategoryAction;
         $this->saveProductAction = $saveProductAction;
         $this->updateCategoryAction = $updateCategoryAction;
         $this->updateProductAction = $updateProductAction;
+        $this->deleteProductAction = $deleteProductAction;
     }
 
     public function store_category(ValidateSaveCategoryRequest $request)
@@ -126,8 +134,26 @@ class ShopController
         return redirect()->route('shop.product.show', $updateProduct->getProductSlug());
     }
 
+    public function product_destroy(int $product)
+    {
+//        dd($product);
+       $this->deleteProductAction->execute(new DeleteProductRequest($product));
+
+        if (request()->wantsJson()) {
+            return $this->emptyResponse(200);
+        }
+
+        return redirect()->route('shop.index')
+            ->with('status' , 'Product Success Deleted!');
+    }
+
     protected function successResponse(array $data, int $statusCode = JsonResponse::HTTP_OK): JsonResponse
     {
         return JsonResponse::create(['data' => $data], $statusCode);
+    }
+
+    protected function emptyResponse(int $statusCode = 200): JsonResponse
+    {
+        return JsonResponse::create(null, $statusCode);
     }
 }

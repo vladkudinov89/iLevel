@@ -35,6 +35,14 @@
                         <a href="{{route('shop.product.edit' , $product['product_slug'])}}"
                            class="btn btn-primary">
                             Edit Product</a>
+                        <form action="{{ route('shop.product.destroy',$product['product_id']) }}" method="POST">
+                            {{ csrf_field() }}
+                            {{ method_field('DELETE') }}
+
+                            <button class="btn btn-danger" type="submit">
+                                Delete
+                            </button>
+                        </form>
                     </div>
                 </div>
 

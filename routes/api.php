@@ -18,3 +18,4 @@ Route::put('/category/{category}', 'Api\\ShopController@update_category')->name(
 
 Route::post('/product', 'Api\\ShopController@store_product')->name('shop.store.product');
 Route::put('/product/{product}', 'Api\\ShopController@update_product')->name('shop.product.update');
+Route::delete('/product/{id}', 'Api\\ShopController@product_destroy')->name('shop.product.destroy');

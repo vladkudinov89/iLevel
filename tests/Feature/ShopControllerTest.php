@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Entities\Category;
 use App\Entities\Product;
 use App\Entities\User;
+use App\Exceptions\Product\ProductDoesNotExistException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -130,6 +131,44 @@ class ShopControllerTest extends TestCase
 
         foreach ($categories as $category) {
             $this->assertDatabaseHas('category_product', [
+                'product_id' => $product->id,
+                'category_id' => $category->id,
+            ]);
+        }
+    }
+
+    /** @test */
+    public function auth_user_can_delete_product()
+    {
+        $categories = factory(Category::class, 2)->create();
+        $product = factory(Product::class)->make(['id' => 1]);
+
+        $response = $this
+            ->post('/api/product', [
+                'name' => $product->name,
+                'price' => $product->price,
+                'amount' => $product->amount,
+                'categories' => array([$categories[0]->id, $categories[1]->id])
+            ]);
+
+        $this->assertDatabaseHas('products', [
+            'name' => $product->name
+        ]);
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseHas('category_product', [
+                'product_id' => $product->id,
+                'category_id' => $category->id,
+            ]);
+        }
+
+        $response = $this
+            ->delete('/api/product/' . $product->id);
+
+        $this->assertDatabaseMissing('products', $product->toArray());
+
+        foreach ($categories as $category) {
+            $this->assertDatabaseMissing('category_product', [
                 'product_id' => $product->id,
                 'category_id' => $category->id,
             ]);
